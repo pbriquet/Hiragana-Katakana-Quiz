@@ -73,7 +73,11 @@ class Quiz:
         self.consonants = kwargs.get('consonants',['','k','s','t','n','h','m','r','w','y','d','p','b'])
         self.vogals = kwargs.get('vogals',['a','i','u','e','o'])
 
-    def select_random(self,number=2):
+    # Mode 0 = Picture before, Romaji after
+    # Mode 1 = Picture before, write answer Romaji, Romaji after
+    # Mode 2 = Romaji before, picture after
+
+    def select_random(self,mode=0,number=2):
         combinations = []
         consonants = []
         vogals = []
@@ -88,6 +92,7 @@ class Quiz:
                     vogal = list_of_vogals[np.random.randint(0,high=len(list_of_vogals))]
                 else:
                     vogal = self.vogals[np.random.randint(0,high=len(self.vogals))]
+
             combinations.append(consonant + vogal)
             consonants.append(consonant)
             vogals.append(vogal)
@@ -110,18 +115,51 @@ class Quiz:
             imgs_comb[imgs_comb<=cut] = 0
             imgs_comb[imgs_comb>cut] = 1
         
-        ax = plt.imshow(imgs_comb,cmap='gray',vmin=0,vmax=1)
-        ax.axes.get_xaxis().set_visible(False)
-        ax.axes.get_yaxis().set_visible(False)
-        plt.show()
-        tmp = ''
-        for comb in combinations:
-            tmp += Quiz.phonetics[comb].capitalize() + ' '
-        print()
-        print('Answer: ' + tmp)
-        print()
+        if(mode==0):
+            ax = plt.imshow(imgs_comb,cmap='gray',vmin=0,vmax=1)
+            ax.axes.get_xaxis().set_visible(False)
+            ax.axes.get_yaxis().set_visible(False)
+            plt.show()
+            tmp = ''
+            for comb in combinations:
+                tmp += Quiz.phonetics[comb].capitalize() + ' '
+            print()
+            print('Answer: ' + tmp)
+            print()
+        elif(mode==1):
+            ax = plt.imshow(imgs_comb,cmap='gray',vmin=0,vmax=1)
+            ax.axes.get_xaxis().set_visible(False)
+            ax.axes.get_yaxis().set_visible(False)
+            plt.show()
+            tmp = ''
+            for k,comb in enumerate(combinations):
+                tmp += Quiz.phonetics[comb].capitalize()
+                if(k < len(combinations) - 1):
+                    tmp += ' '
+            print('Write the right combination:')
+            raw = input()
+            if(raw == tmp):
+                print('Right Answer! ' + tmp)
+                print()
+            else:
+                print('Wrong Answer... ' + tmp)
+        elif(mode==2):
+            tmp = ''
+            for comb in combinations:
+                tmp += Quiz.phonetics[comb].capitalize() + ' '
+            print()
+            print('Write: ' + tmp)
+            print()
+            input()
+            ax = plt.imshow(imgs_comb,cmap='gray',vmin=0,vmax=1)
+            ax.axes.get_xaxis().set_visible(False)
+            ax.axes.get_yaxis().set_visible(False)
+            print('Check ' + self.typeof)
+            plt.show()
+            
+            
 if __name__ == "__main__":
-    consonants = ['','b']  
+    consonants = ['','k']  
     vogals = ['a','i','u','e','o']
     type_of_char = 'Hiragana'
     number_of_characters = 3
@@ -130,4 +168,4 @@ if __name__ == "__main__":
         type_of_char=type_of_char,
         consonants=consonants,
         vogals=vogals)
-    quiz.select_random(number_of_characters)
+    quiz.select_random(number=number_of_characters,mode=1)

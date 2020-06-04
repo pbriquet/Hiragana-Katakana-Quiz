@@ -83,11 +83,11 @@ class Quiz:
             vogal = ''
             while(consonant + vogal not in Quiz.phonetics.keys()):
                 consonant = self.consonants[np.random.randint(0,high=len(self.consonants))]
-                if(consonant != 'n'):
-                    vogal = self.vogals[np.random.randint(0,high=len(self.vogals))]
-                else:
+                if(consonant == 'n' and len(consonants) != 0):
                     list_of_vogals = self.vogals + ['']
                     vogal = list_of_vogals[np.random.randint(0,high=len(list_of_vogals))]
+                else:
+                    vogal = self.vogals[np.random.randint(0,high=len(self.vogals))]
             combinations.append(consonant + vogal)
             consonants.append(consonant)
             vogals.append(vogal)
